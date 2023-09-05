@@ -1,0 +1,288 @@
+import axios from "axios"
+import { getUrl, tokenItem } from "lib/util"
+import { makeAutoObservable } from "mobx"
+import { messageStore } from "./messageStore"
+
+class User {
+  user = ""
+  categories = []
+  sticks = []
+  success = ""
+  baseAxios = null
+
+  constructor() {
+    makeAutoObservable(this)
+    this.getUser = this.getUser.bind(this)
+    this.resetUserStore = this.resetUserStore.bind(this)
+    this.addUser = this.addUser.bind(this)
+    this.getCategories = this.getCategories.bind(this)
+    this.addCategory = this.addCategory.bind(this)
+    this.deleteCategory = this.deleteCategory.bind(this)
+    this.getSticks = this.getSticks.bind(this)
+    this.addStick = this.addStick.bind(this)
+    this.removeStick = this.removeStick.bind(this)
+    this.editStick = this.editStick.bind(this)
+    this.getSticksByDate = this.getSticksByDate.bind(this)
+    this.getbaseAxios = this.getbaseAxios.bind(this)
+  }
+
+  getbaseAxios() {
+    // if (this.baseAxios !== null) {
+    //   return this.baseAxios
+    // }
+    if (typeof window !== "undefined") {
+      const storedValue = localStorage.getItem("accessToken")
+      const token = storedValue ? JSON.parse(storedValue) : ""
+      return axios.create({
+        baseURL: getUrl(),
+        headers: {
+          Authorization: `${token}`,
+          Accept: "application/json",
+        },
+      })
+    }
+  }
+
+  resetUserStore() {
+    this.user = ""
+    this.sticks = []
+  }
+
+  async editStick(categoryId, stickId, question) {
+    try {
+      const response = await this.getbaseAxios().put(
+        `/api/sticks/${stickId}`,
+        { question },
+        {
+          params: {
+            categoryId,
+          },
+        }
+      )
+
+      console.log(response.data)
+      const updatedStick = response.data
+      this.sticks = [...this.sticks].map((st) => {
+        if (st._id === updatedStick._id) {
+          return updatedStick
+        }
+        return st
+      })
+      messageStore.setSuccess("Stick updated successfully")
+    } catch (error) {
+      console.error("Error fetching user:", error)
+      messageStore.setError("Failed updating stick")
+
+      if (error.response) {
+        // The request was made and the server responded with a status code outside of the range of 2xx
+        console.error("Server response:", error.response.data)
+      }
+      if (error.response?.status === 401) {
+        messageStore.setError("You are not authorized")
+      }
+    }
+  }
+  async removeStick(categoryId, stickId) {
+    try {
+      const response = await this.getbaseAxios().delete(
+        `/api/sticks/${stickId}`,
+        {
+          params: {
+            categoryId,
+          },
+        }
+      )
+
+      console.log(response.data)
+      const removedStickId = response.data
+      this.sticks = [...this.sticks].filter((st) => st._id !== removedStickId)
+      messageStore.setSuccess("Stick has been removed successfully")
+    } catch (error) {
+      messageStore.setError("Failed removing stick")
+
+      console.error("Error fetching user:", error)
+      if (error.response) {
+        // The request was made and the server responded with a status code outside of the range of 2xx
+        console.error("Server response:", error.response.data)
+      }
+      if (error.response?.status === 401) {
+        messageStore.setError("You are not authorized")
+      }
+    }
+  }
+  async addStick(categoryId, question) {
+    try {
+      const response = await this.getbaseAxios().post(
+        "/api/sticks/add",
+        { question },
+        {
+          params: {
+            categoryId,
+          },
+        }
+      )
+
+      console.log(response.data)
+
+      this.sticks = [...this.sticks, response.data]
+      messageStore.setSuccess("Stick added successfully")
+    } catch (error) {
+      messageStore.setError("Failed adding stick")
+
+      console.error("Error fetching user:", error)
+      if (error.response) {
+        // The request was made and the server responded with a status code outside of the range of 2xx
+        console.error("Server response:", error.response.data)
+      }
+      if (error.response?.status === 401) {
+        messageStore.setError("You are not authorized")
+      }
+    }
+  }
+  async getSticks(categoryId) {
+    try {
+      const response = await this.getbaseAxios().get("/api/sticks", {
+        params: {
+          categoryId,
+        },
+      })
+      console.log(response.data)
+      console.log(this)
+
+      this.sticks = response.data
+    } catch (error) {
+      console.error("Error fetching user:", error)
+      if (error.response) {
+        // The request was made and the server responded with a status code outside of the range of 2xx
+        console.error("Server response:", error.response.data)
+      }
+      if (error.response?.status === 401) {
+        messageStore.setError("You are not authorized")
+      }
+    }
+  }
+  async getSticksByDate(categoryId) {
+    try {
+      const response = await this.getbaseAxios().get("/api/sticks/date", {
+        params: {
+          categoryId,
+        },
+      })
+      console.log(response.data)
+      console.log(this)
+
+      this.sticks = response.data
+    } catch (error) {
+      console.error("Error fetching user:", error)
+      if (error.response) {
+        // The request was made and the server responded with a status code outside of the range of 2xx
+        console.error("Server response:", error.response.data)
+      }
+      if (error.response?.status === 401) {
+        messageStore.setError("You are not authorized")
+      }
+    }
+  }
+
+  async addUser(userId, name) {
+    try {
+      const response = await this.getbaseAxios().post("/api/users/add", {
+        userId,
+        name,
+      })
+      console.log(response.data)
+      console.log(this)
+    } catch (error) {
+      console.error("Error fetching user:", error)
+      if (error.response) {
+        // The request was made and the server responded with a status code outside of the range of 2xx
+        console.error("Server response:", error.response.data)
+      }
+      if (error.response?.status === 401) {
+        messageStore.setError("You are not authorized")
+      }
+    }
+  }
+  async getUser(userId) {
+    try {
+      const response = await this.getbaseAxios().get(`/api/users/${userId}`)
+      console.log(response.data)
+      console.log(this)
+
+      this.user = response.data
+    } catch (error) {
+      console.error("Error fetching user:", error)
+      if (error.response) {
+        // The request was made and the server responded with a status code outside of the range of 2xx
+        console.error("Server response:", error.response.data)
+      }
+      if (error.response?.status === 401) {
+        messageStore.setError("You are not authorized")
+      }
+    }
+  }
+  async addCategory(name) {
+    const payload = {
+      categoryName: name,
+    }
+    try {
+      const response = await this.getbaseAxios().post(
+        `/api/categories/add`,
+        payload
+      )
+      console.log(response.data)
+
+      this.categories = [...this.categories, response.data] // This will be the user object returned from your API
+      messageStore.setSuccess("Category added successfully")
+    } catch (error) {
+      messageStore.setError("Failed adding category")
+
+      console.error("Error fetching user:", error)
+      if (error.response) {
+        // The request was made and the server responded with a status code outside of the range of 2xx
+        console.error("Server response:", error.response.data)
+      }
+      if (error.response?.status === 401) {
+        messageStore.setError("You are not authorized")
+      }
+    }
+  }
+
+  async deleteCategory(id) {
+    try {
+      const response = await this.getbaseAxios().delete(`/api/categories/${id}`)
+      console.log(response.data)
+      const deletedId = response.data
+      console.log({ deletedId, categories: this.categories })
+
+      this.categories = [...this.categories].filter((c) => c._id !== deletedId) // This will be the user object returned from your API
+      messageStore.setSuccess("Category deleted successfully")
+    } catch (error) {
+      messageStore.setError("Failed deleting category")
+
+      console.error("Error fetching user:", error)
+      if (error.response) {
+        // The request was made and the server responded with a status code outside of the range of 2xx
+        console.error("Server response:", error.response.data)
+      }
+      if (error.response?.status === 401) {
+        messageStore.setError("You are not authorized")
+      }
+    }
+  }
+  async getCategories() {
+    try {
+      const response = await this.getbaseAxios().get("/api/categories")
+      console.log(response.data)
+      console.log(this)
+
+      this.categories = response.data // This will be the user object returned from your API
+    } catch (error) {
+      console.error("Error fetching user:", error)
+      if (error.response?.status === 401) {
+        messageStore.setError("You are not authorized")
+      }
+    }
+  }
+}
+export const userStore = new User()

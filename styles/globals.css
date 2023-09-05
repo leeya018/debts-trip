@@ -1,0 +1,33 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* @import url("https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@10..48,700&family=Caprasimo&display=swap"); */
+@import url("https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@10..48,700&family=Caprasimo&family=Roboto:wght@300&display=swap");
+div,
+button,
+ul,
+li,
+table p {
+  @apply select-none;
+  /* @apply border-2; */
+}
+
+:root {
+  --primary: yellow;
+  --third: rgba(12, 255, 10);
+}
+
+body {
+  font-family: "Bricolage Grotesque", sans-serif;
+  font-family: "Caprasimo", cursive;
+  overflow: hidden;
+  height: 100%;
+}
+
+/* .sidebar {
+  scrollbar-width: none;
+} */
+::-webkit-scrollbar {
+  display: none;
+}
