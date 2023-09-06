@@ -3,7 +3,7 @@ import { getUrl, getbaseAxios, tokenItem } from "lib/util"
 import { makeAutoObservable } from "mobx"
 import { messageStore } from "./messageStore"
 
-class Spanish {
+class Debt {
   user = ""
   categories = []
   words = []
@@ -18,8 +18,8 @@ class Spanish {
     this.getCategories = this.getCategories.bind(this)
     this.addCategory = this.addCategory.bind(this)
     this.deleteCategory = this.deleteCategory.bind(this)
-    this.getWords = this.getWords.bind(this)
-    this.addWord = this.addWord.bind(this)
+    this.getItems = this.getItems.bind(this)
+    this.addItem = this.addItem.bind(this)
     this.removeWord = this.removeWord.bind(this)
     this.editCategory = this.editCategory.bind(this)
     this.editWord = this.editWord.bind(this)
@@ -118,24 +118,24 @@ class Spanish {
       }
     }
   }
-  async addWord(categoryId, word) {
+  async addItem(groupId, item) {
     try {
       const response = await getbaseAxios().post(
-        "/api/words/add",
-        { word },
+        "/api/groups/add",
+        { item },
         {
           params: {
-            categoryId,
+            groupId,
           },
         }
       )
 
       console.log(response.data)
 
-      this.words = [...this.words, response.data]
-      messageStore.setSuccess("Stick added successfully")
+      this.items = [...this.items, response.data]
+      messageStore.setSuccess("item added successfully")
     } catch (error) {
-      messageStore.setError("Failed adding wordssssss")
+      messageStore.setError("Failed adding " + item.name)
 
       console.error("Error fetching user:", error)
       if (error.response) {
@@ -147,11 +147,11 @@ class Spanish {
       }
     }
   }
-  async getWords(categoryId) {
+  async getItems(groupId) {
     try {
-      const response = await getbaseAxios().get("/api/words", {
+      const response = await getbaseAxios().get("/api/items", {
         params: {
-          categoryId,
+          groupId,
         },
       })
       console.log(response.data)
@@ -268,4 +268,4 @@ class Spanish {
     }
   }
 }
-export const spanishStore = new Spanish()
+export const debtStore = new Debt()
