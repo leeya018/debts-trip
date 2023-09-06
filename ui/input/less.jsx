@@ -15,7 +15,7 @@ export default function LessInput({
       onChange={onChange}
       onKeyDown={onKeyDown}
       className={`rounded-md  mb-2
-  h-10 ring hover:ring-blue-300 focus:ring-blue-400
+  h-10 ring 
   focus:outline-none  ${className}`}
     />
   )

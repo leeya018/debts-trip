@@ -10,6 +10,7 @@ module.exports = {
   ],
   theme: {
     colors: {
+      disabled: "#F1F3F4",
       primary: "#00203D",
       white: "#FFFFFF",
       whiteGray: "#DEE2E6",

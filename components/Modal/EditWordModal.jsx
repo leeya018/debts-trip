@@ -11,7 +11,7 @@ import StandardButton from "ui/button/standard"
 import CloseButton from "ui/button/close"
 import { modals } from "lib/util"
 import { categoryStore } from "mobx/categoryStore"
-import { spanishStore } from "mobx/spanishStore"
+import { spanishStore } from "mobx/debtStore"
 
 const EditWordModal = observer(() => {
   const { modalName, closeModal } = modalStore

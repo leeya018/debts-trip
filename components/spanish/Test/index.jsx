@@ -6,7 +6,7 @@ import useLocalStorage from "hooks/useLocalStorage"
 import { useEffect } from "react"
 import { toJS } from "mobx"
 
-import { spanishStore } from "mobx/spanishStore"
+import { spanishStore } from "mobx/debtStore"
 import { modalStore } from "mobx/modalStore"
 import { modals } from "lib/util"
 import EditModal from "components/Modal/Edit"

@@ -5,7 +5,7 @@ import LocalHospitalIcon from "@mui/icons-material/LocalHospital"
 import { categoryStore } from "mobx/categoryStore"
 import { SHOWS, modals } from "lib/util"
 import { modalStore } from "mobx/modalStore"
-import { spanishStore } from "mobx/spanishStore"
+import { spanishStore } from "mobx/debtStore"
 import { navStore } from "mobx/navStore"
 import { testStore } from "mobx/testStore"
 
