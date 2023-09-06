@@ -1,17 +1,14 @@
 import React from "react"
-import Nav from "../components/site/nav"
-import Side from "../components/site/side"
-import Content from "../components/site/content"
-import Caegtories from "components/spanish/Word/words"
 
-export default function index() {
+import Navbar from "components/site/nav"
+import Footer from "components/Footer"
+
+export default function friends() {
   return (
-    <div className="h-[100vh] w-screen bg-secondary flex  ">
-      <Side />
-      <div className="flex flex-col">
-        <Nav />
-        <Content />
-      </div>
+    <div className="h-[100vh] w-screen flex justify-center flex-col  ">
+      <Navbar />
+      friends
+      <Footer />
     </div>
   )
 }
