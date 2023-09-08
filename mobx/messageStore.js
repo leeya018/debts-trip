@@ -12,14 +12,14 @@ class Message {
     this.error = value
     setTimeout(() => {
       this.error = ""
-    }, 3000)
+    }, 30000)
   }
 
   setSuccess = (value) => {
     this.success = value
     setTimeout(() => {
       this.success = ""
-    }, 3000)
+    }, 30000)
   }
 }
 

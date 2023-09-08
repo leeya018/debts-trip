@@ -9,7 +9,7 @@ button,
 ul,
 li,
 table p {
-  @apply select-none;
+  /* @apply select-none; */
   @apply border-2;
 }
 
