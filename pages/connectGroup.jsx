@@ -7,13 +7,14 @@ import { useRouter } from "next/router"
 import Title from "ui/Title"
 import LessInput from "ui/input/less"
 import { debtStore } from "mobx/debtStore"
+import { userStore } from "mobx/userStore"
 
 export default function connectGroup() {
   const router = useRouter()
   const [groupId, setProupId] = useState("")
 
-  const connetToGroup = () => {
-    debtStore.connectToGroup(groupId)
+  const joinGroup = () => {
+    debtStore.joinGroup(userStore.uid, groupId)
   }
   const getStyleValidation = () => {
     if (groupId === "") return ""
@@ -35,7 +36,7 @@ export default function connectGroup() {
         />
 
         {groupId.length === 20 && (
-          <StandardButton onClick={connetToGroup} className="w-[60%]">
+          <StandardButton onClick={joinGroup} className="w-[60%]">
             Connect
           </StandardButton>
         )}
