@@ -9,9 +9,11 @@ import { debtStore } from "mobx/debtStore"
 const AddItem = observer(() => {
   const [name, setName] = useState("")
   const [price, setPrice] = useState("")
+  const [gid] = useLocalStorage("gid")
 
   const add = () => {
-    debtStore.addItem(categoryStore.selecteed._id, {
+    const gId = gid ?? debtStore.group.id
+    debtStore.addProduct(debtStore.uid, gId, {
       name,
       price,
     })

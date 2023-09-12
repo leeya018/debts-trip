@@ -8,13 +8,20 @@ import Title from "ui/Title"
 import LessInput from "ui/input/less"
 import { debtStore } from "mobx/debtStore"
 import { userStore } from "mobx/userStore"
+import { PATH_NAMES } from "lib/util"
+import useLocalStorage from "hooks/useLocalStorage"
 
 export default function connectGroup() {
   const router = useRouter()
   const [groupId, setProupId] = useState("")
+  const [gid, setGid] = useLocalStorage("gid")
 
-  const joinGroup = () => {
-    debtStore.joinGroup(userStore.uid, groupId)
+  const joinGroup = async () => {
+    const isSuccess = await debtStore.joinGroup(userStore.uid, groupId)
+    if (isSuccess) {
+      setGid(groupId)
+      router.push(PATH_NAMES.myList)
+    }
   }
   const getStyleValidation = () => {
     if (groupId === "") return ""

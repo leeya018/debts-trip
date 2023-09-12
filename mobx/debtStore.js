@@ -17,11 +17,14 @@ class Debt {
   success = ""
   baseAxios = null
   group = null
+  myList = []
 
   constructor() {
     makeAutoObservable(this)
     this.createGroup = this.createGroup.bind(this)
     this.joinGroup = this.joinGroup.bind(this)
+    this.addProduct = this.addProduct.bind(this)
+    this.getMyList = this.getMyList.bind(this)
   }
 
   resetUserStore() {}
@@ -34,7 +37,8 @@ class Debt {
         admin: uid,
         users: [
           {
-            [uid]: [],
+            uid,
+            items: [],
           },
         ],
         created_date: new Date(),
@@ -58,32 +62,76 @@ class Debt {
     }
   }
 
-  joinGroup(uid, groupId) {
+  async joinGroup(uid, groupId) {
     const docRef = doc(db, DB_CONNECTIONS.groups, groupId)
     console.log(docRef)
     // Fetch the document
-    getDoc(docRef)
-      .then((docSnapshot) => {
-        if (docSnapshot.exists()) {
-          // Get the current value of the array field
-          const users = docSnapshot.data().users
+    try {
+      const docSnapshot = await getDoc(docRef)
+      if (docSnapshot.exists()) {
+        // Get the current value of the array field
+        const users = docSnapshot.data().users
 
-          // Add a new item to the array
+        updateDoc(docRef, {
+          users: [
+            ...users,
+            {
+              uid,
+              items: [],
+            },
+          ],
+        })
+        return true
+      }
+      console.log("doc is not found")
 
-          // Update the document with the new array
-          return updateDoc(docRef, {
-            users: [...users, { [uid]: [] }],
-          })
-        } else {
-          console.log("No such document!")
-        }
-      })
-      .then(() => {
-        console.log("Document successfully updated!")
-      })
-      .catch((error) => {
-        console.error("Error updating document: ", error)
-      })
+      return false
+    } catch (error) {
+      console.error("Error updating document: ", error)
+      messageStore.setError(error.message)
+    }
+  }
+
+  async addProduct(uid, groupId, product) {
+    const docRef = doc(db, DB_CONNECTIONS.groups, groupId)
+    console.log(docRef)
+    // Fetch the document
+
+    try {
+      const docSnapshot = await getDoc(docRef)
+      if (docSnapshot.exists()) {
+        // Get the current value of the array field
+        let users = docSnapshot.data().users
+        // let myProducts
+        users.map((user) => {
+          if (user.uid === uid) {
+            user.items.push(product)
+            this.myList.replace([...this.myList, product])
+          }
+          return user
+        })
+        await updateDoc(docRef, {
+          users,
+        })
+
+        console.log("added items successfully")
+        messageStore.setSuccess("added items successfully")
+        return true
+      } else {
+        throw new Error("user list is not here ")
+      }
+    } catch (error) {
+      console.error("Error adding item: ", error)
+      messageStore.setError(error.message)
+    }
+  }
+
+  async getMyList(uid, groupId) {
+    const docRef = doc(db, DB_CONNECTIONS.groups, groupId)
+    const docSnapshot = await getDoc(docRef)
+    const users = docSnapshot.data().users
+    const newList = users.find((user) => user.uid === uid)
+    this.myList.replace(newList)
   }
 }
 export const debtStore = new Debt()
