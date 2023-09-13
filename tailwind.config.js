@@ -25,7 +25,14 @@ module.exports = {
       buttonP1: "rgb(13, 31, 161)",
       buttonPHover: "#2600FE",
       green: "#2A9843",
+
       black: "#000000",
+      fa_green: "#000000",
+      fa_blue_b: "#1877F2",
+      fa_blue_l: "#6277F2",
+      fa_blue_in: "#E8F0FE",
+      fa_green: "#36A420",
+      fa_back: "#F0F2F5",
     },
     extend: {
       textColor: ["group-hover"],
