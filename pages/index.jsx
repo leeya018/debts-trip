@@ -4,8 +4,8 @@ import { useRouter } from "next/router"
 import Image from "next/image"
 
 import { useEffect } from "react"
-import israel from "images/isral.png"
-import us from "/images/us.png"
+// import israel from "images/isral.png"
+// import us from "/images/us.png"
 import { BiArrowBack } from "react-icons/bi"
 import { HiMiniArrowsUpDown } from "react-icons/hi"
 import { GoInfo } from "react-icons/go"
@@ -22,7 +22,9 @@ export default function index() {
         <div className="flex flex-col justify-center items-center">
           <Image
             className="mr-2 rounded-full mb-2"
-            src={israel.src}
+            src={
+              "https://media.istockphoto.com/id/594943272/vector/flag-of-israel.jpg?s=612x612&w=0&k=20&c=tAyp5fbehAZIHmS0MmMXZT7dOw24uCA1YR-sg50fEfI="
+            }
             alt="israel"
             height={50}
             width={50}
@@ -36,7 +38,9 @@ export default function index() {
         <div className="flex flex-col justify-center items-center">
           <Image
             className="mr-2 rounded-full mb-2"
-            src={us.src}
+            // src={
+            //   "https://upload.wikimedia.org/wikipedia/en/thumb/a/a4/Flag_of_the_United_States.svg/2560px-Flag_of_the_United_States.svg.png"
+            // }
             alt="israel"
             height={50}
             width={50}
