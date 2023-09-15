@@ -26,6 +26,13 @@ module.exports = {
       buttonPHover: "#2600FE",
       green: "#2A9843",
       black: "#000000",
+
+      calc_gray_l: "#323232",
+      calc_gray_m: "#464646",
+      calc_gray_s: "#656565",
+      calc_orange: "#FF9C3A",
+      calc_white: "#FFFFFF",
+      calc_green: "#398470",
     },
     extend: {
       textColor: ["group-hover"],
