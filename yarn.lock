@@ -393,6 +393,11 @@
   resolved "https://registry.yarnpkg.com/@eslint/js/-/js-8.49.0.tgz#86f79756004a97fa4df866835093f1df3d03c333"
   integrity sha512-1S8uAY/MTJqVx0SC4epBq+N2yhuwtNwLbJYNZyhL2pO1ZVKn5HFXav5T41Ryzy9K9V7ZId2JB2oy/W4aCd9/2w==
 
+"@everapi/freecurrencyapi-js@^1.0.1":
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/@everapi/freecurrencyapi-js/-/freecurrencyapi-js-1.0.1.tgz#efdb8371a612c86b1ea69fba58efe6a8eb838bd1"
+  integrity sha512-GusI6Fdu4gEZhEyOOZKf9KOnSp3Atb3zLUQIp0X569LphBEv0IrZF2CALmbTmut4DacqqlP2zOpeS96bkAt2yQ==
+
 "@fastify/busboy@^1.2.1":
   version "1.2.1"
   resolved "https://registry.yarnpkg.com/@fastify/busboy/-/busboy-1.2.1.tgz#9c6db24a55f8b803b5222753b24fe3aea2ba9ca3"
