@@ -11,15 +11,11 @@ import { RiArrowUpDownFill } from "react-icons/ri"
 import { GoInfo } from "react-icons/go"
 import { TbArrowBackUp } from "react-icons/tb"
 import axios from "axios"
-import Freecurrencyapi from "@everapi/freecurrencyapi-js"
 import { currencyStore } from "mobx/currencyStore"
 import { debtStore } from "mobx/debtStore"
 import { observer } from "mobx-react-lite"
 import CurrencyFlag from "react-currency-flags"
-
-const freecurrencyapi = new Freecurrencyapi(
-  "fca_live_Z1uEV83RkRvjDiDl3CF2a0vTC5JH2OZ72YMnbRyo"
-)
+import { freecurrencyapi } from "lib/util"
 
 const index = observer(() => {
   const router = useRouter()
@@ -77,6 +73,7 @@ const index = observer(() => {
           height={50}
           currency={currencyStore.currencyFrom}
           size="xl"
+          onClick={() => router.push("currencies")}
         />
         <div className="flex flex-col justify-center items-center ">
           <div>{currencyStore.currencyFrom}</div>
@@ -99,6 +96,7 @@ const index = observer(() => {
       <div className="h-36 flex justify-between  items-center px-5 bg-calc_gray_l ring-0">
         <div className="flex flex-col justify-center items-center">
           <CurrencyFlag
+            onClick={() => router.push("currencies")}
             className="rounded-full w-36 h-36"
             width={50}
             height={50}
