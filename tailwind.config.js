@@ -39,6 +39,8 @@ module.exports = {
       backgroundImage: {
         background: "url('/images/background.png')",
         logo: "url('/images/logo.png')",
+        flag1: "url('/images/is.png')",
+        flag2: "url('/images/us.png')",
         // 'footer-texture': "url('/img/footer-texture.png')",
       },
     },
