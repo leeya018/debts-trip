@@ -15,7 +15,7 @@ import { currencyStore } from "mobx/currencyStore"
 import { debtStore } from "mobx/debtStore"
 import { observer } from "mobx-react-lite"
 import CurrencyFlag from "react-currency-flags"
-import { freecurrencyapi, modals } from "lib/util"
+import { formatDate, formatTime, freecurrencyapi, modals } from "lib/util"
 import Currencies from "components/currencies"
 import { modalStore } from "mobx/modalStore"
 
@@ -23,6 +23,8 @@ const index = observer(() => {
   const router = useRouter()
   const [input, setInput] = useState("")
   const [result, setResult] = useState("")
+  const [today, setToday] = useState(new Date())
+  const [rate, setRate] = useState(1)
 
   useEffect(() => {
     freecurrencyapi
@@ -33,9 +35,23 @@ const index = observer(() => {
       .then((response) => {
         console.log(response)
         const rate = response.data[currencyStore.currencyTo]
-        setResult(rate * input)
+        setResult((rate * input).toFixed(2))
+        setRate(rate)
       })
-  }, [input, debtStore.currencyFrom, debtStore.currencyTo, debtStore.choenInp])
+  }, [
+    input,
+    debtStore.currencyFrom,
+    debtStore.currencyTo,
+    debtStore.choenInp,
+    modalStore.modalName,
+  ])
+
+  useEffect(() => {
+    const inter = setInterval(() => {
+      setToday(new Date())
+    }, 1000)
+    return () => clearInterval(inter)
+  }, [])
 
   const switchInputs = () => {
     let temp = input
@@ -74,19 +90,19 @@ const index = observer(() => {
       {modalStore.modalName === modals.currency && <Currencies />}
       {/* source currency */}
       {modalStore.modalName !== modals.currency && (
-        <div className="h-36 flex justify-between items-center px-5 bg-calc_gray_l ring-0">
-          <CurrencyFlag
-            className="rounded-full w-36 h-36"
-            width={50}
-            height={50}
-            currency={currencyStore.currencyFrom}
-            size="xl"
-            onClick={() => {
-              modalStore.openModal(modals.currency)
-              currencyStore.setChosenInp("from")
-            }}
-          />
-          <div className="flex flex-col justify-center items-center ">
+        <div className="h-36 flex  justify-between items-center px-5 bg-calc_gray_l ring-0">
+          <div className="flex flex-col justify-center items-center">
+            <CurrencyFlag
+              className="rounded-full w-36 h-36"
+              width={50}
+              height={50}
+              currency={currencyStore.currencyFrom}
+              size="xl"
+              onClick={() => {
+                modalStore.openModal(modals.currency)
+                currencyStore.setChosenInp("from")
+              }}
+            />
             <div>{currencyStore.currencyFrom}</div>
           </div>
           <input
@@ -251,7 +267,7 @@ const index = observer(() => {
             0
           </button>
           <button
-            onClick={() => handleButtonClick("-")}
+            onClick={() => handleButtonClick(".")}
             className="w-full h-full flex justify-center items-center text-2xl bg-calc_gray_s"
           >
             {" "}
@@ -275,12 +291,16 @@ const index = observer(() => {
       )}
 
       {/* footer */}
-      <div className="flex justify-between items-center w-full ">
-        <TbArrowBackUp />
-        <div className="text-calc_green">{"19/05/23" - "14:25"}</div>
-        <div className="text-calc_gray_s">{"1ls =0.2356 USD"}</div>
+      <div className="flex justify-between items-center w-full bg-calc_gray_l px-5 ">
+        <TbArrowBackUp size={20} color="white" />
+        <div className="flex flex-col items-center">
+          <div className="text-calc_green">
+            {formatDate(today) + "    " + formatTime(today)}
+          </div>
+          <div className="text-calc_gray_s">{`1${currencyStore.currencyFrom} = ${rate}${currencyStore.currencyTo}`}</div>
+        </div>
 
-        <GoInfo />
+        <GoInfo size={20} color="white" />
       </div>
     </div>
   )

@@ -9,8 +9,8 @@ button,
 ul,
 li,
 table p {
-  /* @apply select-none; */
-  @apply border-2;
+  @apply select-none;
+  /* @apply border-2; */
 }
 
 :root {
