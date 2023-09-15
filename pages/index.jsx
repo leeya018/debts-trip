@@ -16,23 +16,46 @@ import { currencyStore } from "mobx/currencyStore"
 const freecurrencyapi = new Freecurrencyapi(
   "fca_live_Z1uEV83RkRvjDiDl3CF2a0vTC5JH2OZ72YMnbRyo"
 )
+
 export default function index() {
   const router = useRouter()
-  const [amount, setAmount] = useState(100)
+  const [input, setInput] = useState("")
   const [result, setResult] = useState("")
 
-  useEffect(() => {
-    freecurrencyapi
-      .latest({
-        base_currency: currencyStore.currencyFrom,
-        currencies: currencyStore.currencyTo,
-      })
-      .then((response) => {
-        console.log(response)
-        const rate = response.data[currencyStore.currencyTo]
-        setResult(rate * amount)
-      })
-  }, [amount])
+  // useEffect(() => {
+  //   freecurrencyapi
+  //     .latest({
+  //       base_currency: currencyStore.currencyFrom,
+  //       currencies: currencyStore.currencyTo,
+  //     })
+  //     .then((response) => {
+  //       console.log(response)
+  //       const rate = response.data[currencyStore.currencyTo]
+  //       setResult(rate * amount)
+  //     })
+  // }, [amount])
+
+  const handleButtonClick = (value) => {
+    setInput((prev) => prev + value)
+  }
+
+  const calculate = () => {
+    try {
+      setInput(eval(input).toString())
+    } catch (error) {
+      setInput("Error")
+    }
+  }
+  const clearInput = () => {
+    setInput("")
+  }
+  const backspace = () => {
+    setInput((prev) => {
+      if (prev) {
+        return prev.slice(0, -1)
+      }
+    })
+  }
 
   return (
     <div className="h-[100vh] w-screen bg-secondary flex flex-col  text-calc_white  ">
@@ -49,12 +72,12 @@ export default function index() {
           <div>us</div>
         </div>
         <input
-          type="number"
-          value={amount}
+          type="text"
+          value={input}
           onChange={(e) => {
-            setAmount((prev) => {
+            setInput((prev) => {
               if (prev) {
-                return e.target.value
+                return e.target.valuerget.value
               }
               return 0
             })
@@ -85,83 +108,143 @@ export default function index() {
       </div>
       {/* calculator */}
       <div className="flex-1 h-full grid grid-cols-4 grid-rows-4 ">
-        <button className="w-full h-full flex justify-center items-center text-2xl bg-calc_gray_m">
+        <button
+          onClick={() => clearInput()}
+          className="w-full h-full flex justify-center items-center text-2xl bg-calc_gray_m"
+        >
           {" "}
           C
         </button>
-        <button className="w-full h-full flex justify-center items-center text-2xl bg-calc_gray_m">
+        <button
+          onClick={() => backspace()}
+          className="w-full h-full flex justify-center items-center text-2xl bg-calc_gray_m"
+        >
           {" "}
           <BiArrowBack size={20} color="white" />
         </button>
-        <button className="w-full h-full flex justify-center items-center text-2xl bg-calc_gray_m">
+        <button
+          onClick={() => handleButtonClick()}
+          className="w-full h-full flex justify-center items-center text-2xl bg-calc_gray_m"
+        >
           {" "}
           <RiArrowUpDownFill size={20} color="white" />
         </button>
-        <button className="w-full h-full flex justify-center items-center text-2xl bg-calc_orange">
+        <button
+          onClick={() => handleButtonClick("/")}
+          className="w-full h-full flex justify-center items-center text-2xl bg-calc_orange"
+        >
           {" "}
           /
         </button>
-        <button className="w-full h-full flex justify-center items-center text-2xl bg-calc_gray_s">
+        <button
+          onClick={() => handleButtonClick("7")}
+          className="w-full h-full flex justify-center items-center text-2xl bg-calc_gray_s"
+        >
           {" "}
           7
         </button>
-        <button className="w-full h-full flex justify-center items-center text-2xl bg-calc_gray_s">
+        <button
+          onClick={() => handleButtonClick("8")}
+          className="w-full h-full flex justify-center items-center text-2xl bg-calc_gray_s"
+        >
           {" "}
           8
         </button>
-        <button className="w-full h-full flex justify-center items-center text-2xl bg-calc_gray_s">
+        <button
+          onClick={() => handleButtonClick("9")}
+          className="w-full h-full flex justify-center items-center text-2xl bg-calc_gray_s"
+        >
           {" "}
           9
         </button>
-        <button className="w-full h-full flex justify-center items-center text-2xl bg-calc_orange">
+        <button
+          onClick={() => handleButtonClick("*")}
+          className="w-full h-full flex justify-center items-center text-2xl bg-calc_orange"
+        >
           {" "}
           X
         </button>
-        <button className="w-full h-full flex justify-center items-center text-2xl bg-calc_gray_s">
+        <button
+          onClick={() => handleButtonClick("4")}
+          className="w-full h-full flex justify-center items-center text-2xl bg-calc_gray_s"
+        >
           {" "}
           4
         </button>
-        <button className="w-full h-full flex justify-center items-center text-2xl bg-calc_gray_s">
+        <button
+          onClick={() => handleButtonClick("5")}
+          className="w-full h-full flex justify-center items-center text-2xl bg-calc_gray_s"
+        >
           {" "}
           5
         </button>
-        <button className="w-full h-full flex justify-center items-center text-2xl bg-calc_gray_s">
+        <button
+          onClick={() => handleButtonClick("6")}
+          className="w-full h-full flex justify-center items-center text-2xl bg-calc_gray_s"
+        >
           {" "}
           6
         </button>
-        <button className="w-full h-full flex justify-center items-center text-2xl bg-calc_orange">
+        <button
+          onClick={() => handleButtonClick("-")}
+          className="w-full h-full flex justify-center items-center text-2xl bg-calc_orange"
+        >
           {" "}
           -
         </button>
-        <button className="w-full h-full flex justify-center items-center text-2xl bg-calc_gray_s">
+        <button
+          onClick={() => handleButtonClick("1")}
+          className="w-full h-full flex justify-center items-center text-2xl bg-calc_gray_s"
+        >
           {" "}
           1
         </button>
-        <button className="w-full h-full flex justify-center items-center text-2xl bg-calc_gray_s">
+        <button
+          onClick={() => handleButtonClick("2")}
+          className="w-full h-full flex justify-center items-center text-2xl bg-calc_gray_s"
+        >
           {" "}
           2
         </button>
-        <button className="w-full h-full flex justify-center items-center text-2xl bg-calc_gray_s">
+        <button
+          onClick={() => handleButtonClick("3")}
+          className="w-full h-full flex justify-center items-center text-2xl bg-calc_gray_s"
+        >
           {" "}
           3
         </button>
-        <button className="w-full h-full flex justify-center items-center text-2xl bg-calc_orange">
+        <button
+          onClick={() => handleButtonClick("+")}
+          className="w-full h-full flex justify-center items-center text-2xl bg-calc_orange"
+        >
           {" "}
-          -
+          +
         </button>
-        <button className="w-full h-full flex justify-center items-center text-2xl bg-calc_gray_s">
+        <button
+          onClick={() => handleButtonClick("0")}
+          className="w-full h-full flex justify-center items-center text-2xl bg-calc_gray_s"
+        >
           {" "}
           0
         </button>
-        <button className="w-full h-full flex justify-center items-center text-2xl bg-calc_gray_s">
+        <button
+          onClick={() => handleButtonClick("-")}
+          className="w-full h-full flex justify-center items-center text-2xl bg-calc_gray_s"
+        >
           {" "}
           .
         </button>
-        <button className="w-full h-full flex justify-center items-center text-2xl bg-calc_gray_s">
+        <button
+          onClick={() => handleButtonClick("%")}
+          className="w-full h-full flex justify-center items-center text-2xl bg-calc_gray_s"
+        >
           {" "}
           %
         </button>
-        <button className="w-full h-full flex justify-center items-center text-2xl bg-calc_orange">
+        <button
+          onClick={calculate}
+          className="w-full h-full flex justify-center items-center text-2xl bg-calc_orange"
+        >
           {" "}
           =
         </button>
