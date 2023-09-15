@@ -22,8 +22,22 @@ class Currency {
     this.joinGroup = this.joinGroup.bind(this)
     this.addProduct = this.addProduct.bind(this)
     this.getMyList = this.getMyList.bind(this)
+    this.setCurrencyTo = this.setCurrencyTo.bind(this)
+    this.setCurrencyFrom = this.setCurrencyFrom.bind(this)
   }
 
+  setCurrencyFrom(currencyFrom) {
+    this.currencyFrom = currencyFrom
+  }
+  setCurrencyTo(currencyTo) {
+    this.currencyTo = currencyTo
+  }
+
+  switchCurr() {
+    let temp = this.currencyTo
+    this.currencyTo = this.currencyFrom
+    this.currencyFrom = temp
+  }
   resetUserStore() {}
 
   async createGroup(name, uid) {

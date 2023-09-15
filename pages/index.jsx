@@ -13,28 +13,38 @@ import { TbArrowBackUp } from "react-icons/tb"
 import axios from "axios"
 import Freecurrencyapi from "@everapi/freecurrencyapi-js"
 import { currencyStore } from "mobx/currencyStore"
+import { debtStore } from "mobx/debtStore"
+import { observer } from "mobx-react-lite"
+import CurrencyFlag from "react-currency-flags"
+
 const freecurrencyapi = new Freecurrencyapi(
   "fca_live_Z1uEV83RkRvjDiDl3CF2a0vTC5JH2OZ72YMnbRyo"
 )
 
-export default function index() {
+const index = observer(() => {
   const router = useRouter()
   const [input, setInput] = useState("")
   const [result, setResult] = useState("")
 
-  // useEffect(() => {
-  //   freecurrencyapi
-  //     .latest({
-  //       base_currency: currencyStore.currencyFrom,
-  //       currencies: currencyStore.currencyTo,
-  //     })
-  //     .then((response) => {
-  //       console.log(response)
-  //       const rate = response.data[currencyStore.currencyTo]
-  //       setResult(rate * amount)
-  //     })
-  // }, [amount])
+  useEffect(() => {
+    freecurrencyapi
+      .latest({
+        base_currency: currencyStore.currencyFrom,
+        currencies: currencyStore.currencyTo,
+      })
+      .then((response) => {
+        console.log(response)
+        const rate = response.data[currencyStore.currencyTo]
+        setResult(rate * input)
+      })
+  }, [input, debtStore.currencyFrom, debtStore.currencyTo])
 
+  const switchInputs = () => {
+    let temp = input
+    setInput(result)
+    setResult(temp)
+    currencyStore.switchCurr()
+  }
   const handleButtonClick = (value) => {
     setInput((prev) => prev + value)
   }
@@ -61,15 +71,15 @@ export default function index() {
     <div className="h-[100vh] w-screen bg-secondary flex flex-col  text-calc_white  ">
       {/* source currency */}
       <div className="h-36 flex justify-between items-center px-5 bg-calc_gray_l ring-0">
+        <CurrencyFlag
+          className="rounded-full w-36 h-36"
+          width={50}
+          height={50}
+          currency={currencyStore.currencyFrom}
+          size="xl"
+        />
         <div className="flex flex-col justify-center items-center ">
-          <Image
-            className=" rounded-full w-12 h-12"
-            src={us.src}
-            alt="israel"
-            height={50}
-            width={50}
-          />
-          <div>us</div>
+          <div>{currencyStore.currencyFrom}</div>
         </div>
         <input
           type="text"
@@ -88,17 +98,14 @@ export default function index() {
       {/* target currency */}
       <div className="h-36 flex justify-between  items-center px-5 bg-calc_gray_l ring-0">
         <div className="flex flex-col justify-center items-center">
-          <Image
-            className="mr-2 rounded-full mb-2"
-            // src={
-            //   "https://upload.wikimedia.org/wikipedia/en/thumb/a/a4/Flag_of_the_United_States.svg/2560px-Flag_of_the_United_States.svg.png"
-            // }
-            src={is.src}
-            alt="israel"
-            height={50}
+          <CurrencyFlag
+            className="rounded-full w-36 h-36"
             width={50}
+            height={50}
+            currency={currencyStore.currencyTo}
+            size="xl"
           />
-          <div>us</div>
+          <div>{currencyStore.currencyTo}</div>
         </div>
         <input
           type="text"
@@ -123,7 +130,7 @@ export default function index() {
           <BiArrowBack size={20} color="white" />
         </button>
         <button
-          onClick={() => handleButtonClick()}
+          onClick={switchInputs}
           className="w-full h-full flex justify-center items-center text-2xl bg-calc_gray_m"
         >
           {" "}
@@ -260,4 +267,5 @@ export default function index() {
       </div>
     </div>
   )
-}
+})
+export default index
