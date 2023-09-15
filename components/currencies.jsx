@@ -14,8 +14,9 @@ import { freecurrencyapi } from "lib/util"
 import { currencyStore } from "mobx/currencyStore"
 import CurrencyFlag from "react-currency-flags"
 import { observer } from "mobx-react-lite"
+import { modalStore } from "mobx/modalStore"
 
-const currencies = observer(() => {
+const Currencies = observer(() => {
   const router = useRouter()
   const [currs, setCurrs] = useState([])
 
@@ -28,11 +29,20 @@ const currencies = observer(() => {
     })
   }, [])
 
+  const handleChooseCurr = (curr) => {
+    if (currencyStore.chosenInp === "from") {
+      currencyStore.setCurrencyFrom(curr)
+    } else {
+      currencyStore.setCurrencyTo(curr)
+    }
+    modalStore.closeModal()
+  }
+
   return (
     <div className="h-[100vh] w-screen bg-secondary flex flex-col  text-calc_white  ">
       <ul className="scroll-auto overflow-y-auto">
         {currs.map((curr, key) => (
-          <li key={key} className=" ">
+          <li key={key} className=" " onClick={() => handleChooseCurr(curr)}>
             <div className="flex justify-between items-center bg-calc_gray_m py-7 px-5">
               <CurrencyFlag
                 className="rounded-full w-36 h-36"
@@ -49,4 +59,4 @@ const currencies = observer(() => {
     </div>
   )
 })
-export default currencies
+export default Currencies

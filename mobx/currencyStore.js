@@ -15,6 +15,7 @@ import { messageStore } from "./messageStore"
 class Currency {
   currencyTo = "USD"
   currencyFrom = "EUR"
+  chosenInp = "from"
 
   constructor() {
     makeAutoObservable(this)
@@ -31,6 +32,9 @@ class Currency {
   }
   setCurrencyTo(currencyTo) {
     this.currencyTo = currencyTo
+  }
+  setChosenInp(name) {
+    this.chosenInp = name
   }
 
   switchCurr() {
