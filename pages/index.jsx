@@ -3,6 +3,8 @@ import { observer } from "mobx-react-lite"
 import UpNav from "components/whatsapp/UpNav"
 import Title from "components/whatsapp/Title"
 import Filter from "components/whatsapp/Filter"
+import Choose from "components/whatsapp/Choose"
+import ArchivePanel from "components/whatsapp/ArchivePanel"
 
 const index = observer(() => {
   return (
@@ -10,8 +12,8 @@ const index = observer(() => {
       <UpNav />
       <Title>WA Bussiness</Title>
       <Filter />
-      {/* <Choose /> */}
-      {/* <ArchivePanel /> */}
+      <Choose />
+      <ArchivePanel />
       {/* <BottomNav /> */}
     </div>
   )
