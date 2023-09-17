@@ -9,10 +9,14 @@ button,
 ul,
 li,
 table p {
-  @apply select-none;
-  /* @apply border-2; */
+  /* @apply select-none; */
+  @apply border-2;
 }
-
+input::placeholder {
+  position: relative; /* this will make it move back and forth */
+  left: 30px;
+  color: #838287;
+}
 :root {
   --primary: yellow;
   --third: rgba(12, 255, 10);
