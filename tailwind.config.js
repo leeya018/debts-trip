@@ -33,6 +33,10 @@ module.exports = {
       calc_orange: "#FF9C3A",
       calc_white: "#FFFFFF",
       calc_green: "#398470",
+
+      whats_blue: "#0E65F0",
+      whats_green: "#398470",
+      whats__gray: "#464646",
     },
     extend: {
       textColor: ["group-hover"],
