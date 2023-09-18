@@ -8,7 +8,7 @@ class Nav {
     makeAutoObservable(this)
   }
 
-  setactiveNavItem = (navItem) => {
+  setActiveNavItem = (navItem) => {
     this.activeNavItem = navItem
   }
 }
