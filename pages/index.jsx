@@ -6,6 +6,7 @@ import Filter from "components/whatsapp/Filter"
 import Choose from "components/whatsapp/Choose"
 import ArchivePanel from "components/whatsapp/ArchivePanel"
 import BottomNav from "components/whatsapp/BottomNav"
+import Messages from "components/whatsapp/Messages"
 
 const index = observer(() => {
   return (
@@ -15,6 +16,7 @@ const index = observer(() => {
       <Filter />
       <Choose />
       <ArchivePanel />
+      <Messages /> 
       <BottomNav />
     </div>
   )

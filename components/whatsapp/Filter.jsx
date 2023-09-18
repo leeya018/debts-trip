@@ -7,7 +7,7 @@ export default function Filter() {
       <input
         placeholder="search"
         type="text"
-        className="w-full  rounded-md bg-whats_gray_b text-whats_gray_t  "
+        className="w-full pl-[30px]  rounded-md bg-whats_gray_b text-whats_gray_t  "
       />
       <GoSearch className="w-6 h-6 absolute left-3 " />
     </div>
