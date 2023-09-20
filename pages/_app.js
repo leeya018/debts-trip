@@ -1,6 +1,7 @@
 import { GoogleOAuthProvider } from "@react-oauth/google"
 import Head from "next/head"
 import "../styles/globals.css"
+import "../styles/style.css"
 export function reportWebVitals(metric) {
   if (metric.label === "web-vital") {
     console.log(metric.name, metric.value) // or send to analytics

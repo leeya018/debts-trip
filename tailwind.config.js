@@ -4,6 +4,7 @@ module.exports = {
     "./ui/**/*.{js,ts,jsx,tsx}",
     "./pages/**/*.{js,ts,jsx,tsx}",
     "./components/**/*.{js,ts,jsx,tsx}",
+    "./styles/**/*.{css}",
 
     // Or if using `src` directory:
     "./src/**/*.{js,ts,jsx,tsx}",

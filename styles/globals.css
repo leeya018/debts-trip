@@ -12,6 +12,8 @@ table p {
   /* @apply select-none; */
   /* @apply border-2; */
 }
+/* styles.css or your TailwindCSS stylesheet */
+
 input::placeholder {
   position: relative; /* this will make it move back and forth */
   left: 30px;
