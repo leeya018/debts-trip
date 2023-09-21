@@ -12,20 +12,20 @@ export default function loginOption() {
   const router = useRouter()
   const { setLoginUser, setToken, getToken } = userStore
 
-  useEffect(() => {
-    const newToken = getToken()
-    if (newToken) {
-      setToken(newToken)
-      const user = parseJwt(newToken)
-      const newUser = {
-        photoURL: user.picture,
-        displayName: user.name,
-        uid: user.user_id,
-      }
-      setLoginUser(newUser)
-      console.log({ user })
-    }
-  }, [getToken, setLoginUser])
+  // useEffect(() => {
+  //   const newToken = getToken()
+  //   if (newToken) {
+  //     setToken(newToken)
+  //     const user = parseJwt(newToken)
+  //     const newUser = {
+  //       photoURL: user.picture,
+  //       displayName: user.name,
+  //       uid: user.user_id,
+  //     }
+  //     setLoginUser(newUser)
+  //     console.log({ user })
+  //   }
+  // }, [getToken, setLoginUser])
 
   const login = () => {
     const provider = new GoogleAuthProvider()
@@ -45,7 +45,7 @@ export default function loginOption() {
         console.log(user.uid)
         setLoginUser(user)
         // debtStore.addUser(user.uid, user.displayName)
-        router.push("/myList")
+        router.push("/")
         // IdP data available using getAdditionalUserInfo(result)
         // ...
       })

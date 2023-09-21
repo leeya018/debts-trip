@@ -1,5 +1,5 @@
 import axios from "axios"
-import { getUrl, tokenItem } from "lib/util"
+import { getUrl } from "lib/util"
 import { makeAutoObservable } from "mobx"
 
 class User {
@@ -9,6 +9,32 @@ class User {
   token = ""
   constructor() {
     makeAutoObservable(this)
+    this.loadState()
+  }
+  loadState() {
+    if (typeof window !== "undefined" && window.localStorage) {
+      const user = window.localStorage.getItem("user")
+      if (user !== null && user !== undefined) {
+        this.photoURL = JSON.parse(user).photoURL
+        this.displayName = JSON.parse(user).displayName
+        this.uid = JSON.parse(user).photoURL
+        this.token = JSON.parse(user).token
+        console.log("loadState => " + this.displayName)
+      }
+    }
+  }
+
+  saveState() {
+    console.log("saveState")
+    if (typeof window !== "undefined" && window.localStorage) {
+      const user = {
+        photoURL: this.photoURL,
+        displayName: this.displayName,
+        uid: this.uid,
+        token: this.token,
+      }
+      window.localStorage.setItem("user", JSON.stringify(user))
+    }
   }
 
   setLoginUser = (user) => {
@@ -18,44 +44,25 @@ class User {
   }
   resetLoginUser = () => {
     this.photoURL = ""
-    this.displayName = ''
-    this.uid = ''
+    this.displayName = ""
+    this.uid = ""
   }
 
   hasToken = () => {
-    const token = this.getToken()
-    token !== null && token !== undefined && token !== ""
-  }
-
-  getToken = () => {
-    if (typeof window !== "undefined" && window.localStorage) {
-      try {
-        return localStorage.getItem(tokenItem)
-      } catch (e) {
-        console.warn("Failed to retrieve from localStorage:", e)
-        return null
-      }
-    }
+    return this.token !== undefined && this.token
   }
 
   setToken = (newToken) => {
-    if (typeof window !== "undefined" && window.localStorage) {
-      try {
-        localStorage.setItem(tokenItem, newToken)
-        this.token = newToken
-      } catch (e) {
-        console.warn("Failed to save to localStorage:", e)
-      }
-    }
+    this.token = newToken
   }
   removeToken = () => {
-    localStorage.removeItem(tokenItem)
+    localStorage.removeItem("token")
   }
   checkTokenValid = async () => {
     const config = {
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${this.getToken()}`,
+        Authorization: `Bearer ${this.token}`,
       },
     }
     try {

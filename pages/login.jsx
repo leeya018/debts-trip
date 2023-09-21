@@ -19,20 +19,20 @@ export default function login() {
   const [email, setEmail] = useState("lee1@yahav.com")
   const [password, setPassword] = useState("123456")
 
-  useEffect(() => {
-    const newToken = getToken()
-    if (newToken) {
-      setToken(newToken)
-      const user = parseJwt(newToken)
-      const newUser = {
-        photoURL: user.picture,
-        displayName: user.name,
-        uid: user.user_id,
-      }
-      setLoginUser(newUser)
-      console.log({ user })
-    }
-  }, [getToken, setLoginUser])
+  // useEffect(() => {
+  //   const newToken = getToken()
+  //   if (newToken) {
+  //     setToken(newToken)
+  //     const user = parseJwt(newToken)
+  //     const newUser = {
+  //       photoURL: user.picture,
+  //       displayName: user.name,
+  //       uid: user.user_id,
+  //     }
+  //     setLoginUser(newUser)
+  //     console.log({ user })
+  //   }
+  // }, [getToken, setLoginUser])
 
   const login = () => {
     signInWithEmailAndPassword(auth, email, password)
@@ -46,7 +46,7 @@ export default function login() {
         console.log(user.displayName)
         console.log(user.uid)
         setLoginUser(user)
-        router.push("/myList")
+        router.push("/")
       })
       .catch((error) => {
         const errorCode = error.code
