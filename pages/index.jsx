@@ -4,25 +4,20 @@ import AddDetails from "components/belives/AddDetails"
 import AffirmationFind from "components/belives/AffirmationFind"
 import axios from "axios"
 import ColoredText from "components/belives/ColoredText"
+import Sound from "components/belives/Sound"
 
 const index = observer(() => {
-  const [message, setMessage] = useState('');
-  
-  const generateMessage = async () => {
- 
-  }
+  const [message, setMessage] = useState("")
 
+  const generateMessage = async () => {}
 
   return (
     <div className="h-[100vh] w-screen bg-secondary flex flex-col  px-2">
       {/* AddDetails */}
-      
+
       <AffirmationFind />
     </div>
   )
 })
 
 export default index
-
-
-
