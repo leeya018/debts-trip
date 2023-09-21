@@ -3,6 +3,7 @@ import { observer } from "mobx-react-lite"
 import AddDetails from "components/belives/AddDetails"
 import AffirmationFind from "components/belives/AffirmationFind"
 import axios from "axios"
+import ColoredText from "components/belives/ColoredText"
 
 const index = observer(() => {
   const [message, setMessage] = useState('');
@@ -15,6 +16,7 @@ const index = observer(() => {
   return (
     <div className="h-[100vh] w-screen bg-secondary flex flex-col  px-2">
       {/* AddDetails */}
+      
       <AffirmationFind />
     </div>
   )

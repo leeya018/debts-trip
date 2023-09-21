@@ -6,6 +6,7 @@ module.exports = {
     "./components/**/*.{js,ts,jsx,tsx}",
     "./api/**/*.{js}",
     "./styles/**/*.{css}",
+    "./images/**/*.{*}",
 
     // Or if using `src` directory:
     "./src/**/*.{js,ts,jsx,tsx}",
