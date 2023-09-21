@@ -1,18 +1,15 @@
-@keyframes flicker {
+@keyframes showHide {
   0%,
-  20%,
-  40%,
+  30%,
   60%,
+  90% {
+    opacity: 1;
+  }
+
+  20%,
+  50%,
   80%,
   100% {
     opacity: 0;
-  }
-
-  10%,
-  30%,
-  50%,
-  70%,
-  90% {
-    opacity: 1;
   }
 }
