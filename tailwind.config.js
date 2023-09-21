@@ -4,6 +4,7 @@ module.exports = {
     "./ui/**/*.{js,ts,jsx,tsx}",
     "./pages/**/*.{js,ts,jsx,tsx}",
     "./components/**/*.{js,ts,jsx,tsx}",
+    "./api/**/*.{js}",
     "./styles/**/*.{css}",
 
     // Or if using `src` directory:
@@ -40,6 +41,12 @@ module.exports = {
       whats_gray_b: "#EEEEF0", //background
       whats_gray_t: "#838287", //text
       whats_gray_i: "#9B9CA2", //icons
+
+      belief_blue: "#0278AE",
+      belief_green: "#36C457",
+      belief_gray_b: "#EEEEF0", //background
+      belief_gray_t: "#838287", //text
+      belief_gray_i: "#9B9CA2", //icons
     },
     extend: {
       textColor: ["group-hover"],
