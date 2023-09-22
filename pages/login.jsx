@@ -46,7 +46,7 @@ export default function login() {
         console.log(user.displayName)
         console.log(user.uid)
         setLoginUser(user)
-        router.push("/")
+        router.push("/profile")
       })
       .catch((error) => {
         const errorCode = error.code

@@ -45,7 +45,7 @@ export default function loginOption() {
         console.log(user.uid)
         setLoginUser(user)
         // debtStore.addUser(user.uid, user.displayName)
-        router.push("/")
+        router.push("/profile")
         // IdP data available using getAdditionalUserInfo(result)
         // ...
       })

@@ -17,7 +17,7 @@ class User {
       if (user !== null && user !== undefined) {
         this.photoURL = JSON.parse(user).photoURL
         this.displayName = JSON.parse(user).displayName
-        this.uid = JSON.parse(user).photoURL
+        this.uid = JSON.parse(user).uid
         this.token = JSON.parse(user).token
         console.log("loadState => " + this.displayName)
       }
