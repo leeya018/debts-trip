@@ -15,14 +15,14 @@ import { auth } from "../../../firebase"
 import Person2Icon from "@mui/icons-material/Person2"
 
 const Navbar = observer(() => {
+  const isClient = typeof window !== "undefined"
   const router = useRouter()
-  const { setLoginUser, setToken, getToken } = userStore
+  const { setLoginUser, setToken } = userStore
 
   useEffect(() => {
-    const newToken = getToken()
-    if (newToken) {
-      setToken(newToken)
-      const user = parseJwt(newToken)
+    if (userStore.token) {
+      setToken(userStore.token)
+      const user = parseJwt(userStore.token)
       const newUser = {
         photoURL: user.picture,
         displayName: user.name,
@@ -31,7 +31,7 @@ const Navbar = observer(() => {
       setLoginUser(newUser)
       console.log({ user })
     }
-  }, [getToken, setLoginUser])
+  }, [userStore.token, setLoginUser])
 
   const logout = () => {
     signOut(auth)
@@ -58,14 +58,17 @@ const Navbar = observer(() => {
   }
   return (
     <div
-      className="absolute bg-white z-50 top-0 left-0 right-0 
+      className=" bg-white z-50 top-0 left-0 right-0 
       w-full
-     flex  border-2 justify-between items-center "
+     flex  justify-between items-center "
     >
       <NavItem className="text-red-500 ml-2" onClick={logout}>
         Logout
       </NavItem>
-      {getProfileImage()}
+      <div className="flex justify-center items-center gap-2 ">
+        {isClient && <div>{userStore.displayName}</div>}
+        {getProfileImage()}
+      </div>
     </div>
   )
 })

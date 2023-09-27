@@ -6,7 +6,7 @@ import StandardButton from "ui/button/standard"
 import Title from "ui/Title"
 import LessInput from "ui/input/less"
 import API, { askGptApi, getBelivesApi, saveBelivesApi } from "api"
-import ColoredText from "./ColoredText"
+import ColoredText from "../components/belives/ColoredText"
 import { asyncStore } from "mobx/asyncStore"
 import { CSpinner } from "@coreui/bootstrap-react"
 
@@ -17,23 +17,10 @@ const AffirmationFind = observer(() => {
   const [userBelives, setUserBelives] = useState({})
   const [belief, setBelief] = useState("")
   const [affirmationsLim, setAffirmationsLim] = useState(3)
-  // const [affirmations, setAffirmations] = useState([])
-  const [affirmations, setAffirmations] = useState([
-    // "I am a fast learner.",
-    // "I have an incredible memory.",
-    // "I absorb knowledge quickly and easily.",
-    // "I retain information effortlessly.",
-    // "My memory is sharp and efficient.",
-    // "I have a natural ability to learn and remember things.",
-    // "I effortlessly grasp new concepts and apply them.",
-    // "I am a quick thinker and problem solver.",
-    // "I excel at learning and retaining information.",
-    // "My mind is sharp and focused.",
-    // "I have a photographic memory.",
-    // "Learning comes naturally to me.",
-  ])
+  const [affirmations, setAffirmations] = useState([])
   const [lineNum, setLineNum] = useState(0)
   const [isStart, setIsStart] = useState(false)
+  const blurTimeoutRef = useRef(null)
 
   useEffect(() => {
     getBelivesApi().then((res) => {
@@ -48,9 +35,14 @@ const AffirmationFind = observer(() => {
 
   // Handle input blur
   const handleBlur = (e) => {
-    if (!listRef.current?.contains(e.target?.value)) {
+    // if (
+    //   !listRef.current?.contains(e.target)
+    // ) {
+    //   setIsFocused(false)
+    // }
+    blurTimeoutRef.current = setTimeout(() => {
       setIsFocused(false)
-    }
+    }, 200)
   }
   const increaseLineNum = () => {
     setLineNum((prev) => prev + 1)
@@ -59,6 +51,7 @@ const AffirmationFind = observer(() => {
     setBelief(userBelif.name)
     setAffirmations(userBelif.affirmations)
     setIsFocused(false)
+    clearTimeout(blurTimeoutRef.current)
   }
   const generateAffirmations = async () => {
     if (!belief || asyncStore.isLoading) {
@@ -91,7 +84,6 @@ const AffirmationFind = observer(() => {
       <Title>Choose Belief</Title>
       <div className="flex items-center mb-2">
         <div>affirmations:</div>
-
         <input
           type="number"
           className="w-20 h-10 border-2 rounded-sm ml-3"
@@ -100,12 +92,12 @@ const AffirmationFind = observer(() => {
           value={affirmationsLim}
           onChange={(e) => setAffirmationsLim(e.target.value)}
         />
-        {hover && (
+        {/* {hover && (
           <div className="absolute  left-1/2 transform  -translate-y\ -translate-x-1/2 border border-gray-300 p-2 bg-gray-100 text-sm whitespace-nowrap z-50">
             <p>clicks are limited according to your plan clicks are limited</p>
             according to your plan clicks are limited according to your plan
           </div>
-        )}
+        )} */}
       </div>
       <LessInput
         placeholder="add belife"
@@ -117,17 +109,18 @@ const AffirmationFind = observer(() => {
       />
       {isFocused && (
         <ul className=" flex flex-col gap-1 " ref={listRef}>
-          {userBelives
-            .filter((userBelif) => userBelif.name.includes(belief))
-            .map((userBelif, index) => (
-              <li
-                className="cursor-pointer bg-whats_gray_t hover:bg-whats_gray_i"
-                key={index}
-                onClick={() => chooseUserAffirmation(userBelif)}
-              >
-                {userBelif.name}
-              </li>
-            ))}
+          {userBelives.length > 0 &&
+            userBelives
+              .filter((userBelif) => userBelif.name?.includes(belief))
+              .map((userBelif, index) => (
+                <li
+                  className="cursor-pointer bg-whats_gray_t hover:bg-whats_gray_i"
+                  key={index}
+                  onClick={() => chooseUserAffirmation(userBelif)}
+                >
+                  {userBelif.name}
+                </li>
+              ))}
         </ul>
       )}
 
@@ -138,7 +131,8 @@ const AffirmationFind = observer(() => {
         onClick={generateAffirmations}
         className="bg-belief_pink"
       >
-        Generate Affirmations
+        <p>Generate Affirmations </p>
+        <span className="text-sm"> (limited)</span>
       </StandardButton>
       <div>{setBelief}</div>
       <div>
