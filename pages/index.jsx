@@ -31,7 +31,7 @@ const index = observer(() => {
     <div className="h-[100vh] w-screen bg-secondary flex flex-col  px-2">
       {isClient && (
         <div>
-          <div className="absolute top-0 right-0">{getProfileImage()}</div>
+          {/* <div className="absolute top-0 right-0">{getProfileImage()}</div> */}
           {/* <div>{userStore.displayName}</div>
           <div>{userStore.uid}</div>
           <div>{userStore.token}</div> */}
@@ -39,7 +39,7 @@ const index = observer(() => {
       )}
       {/* AddDetails */}
 
-      {/* <AffirmationFind /> */}
+      <AffirmationFind />
     </div>
   )
 })

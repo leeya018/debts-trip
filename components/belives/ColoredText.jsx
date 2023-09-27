@@ -6,7 +6,13 @@ import useSound from "hooks/useSound"
 let interImage
 
 const ColoredText = observer(
-  ({ inputText = "23132123123", increaseLineNum = () => {} }) => {
+  ({
+    inputText = "23132123123",
+    increaseLineNum = () => {},
+    setIsStart,
+    affirmations,
+    lineNum,
+  }) => {
     const [coloredText, setColoredText] = useState([])
     const [currentIndex, setCurrentIndex] = useState(0)
     const [size, setSize] = useState(10) // starting size (percentage)
@@ -19,6 +25,18 @@ const ColoredText = observer(
       setColoredText([])
       setCurrentIndex(0)
     }, [inputText])
+    useEffect(() => {
+      console.log("start")
+      return () => {
+        // setIsStart(false)
+        // setIsStart(false)
+        console.log("end   " + currentIndex)
+        console.log(`${affirmations.length} == ${lineNum}`)
+        if (affirmations.length == lineNum) {
+          setIsStart(false)
+        }
+      }
+    }, [])
 
     useEffect(() => {
       const timer = setInterval(() => {
@@ -35,7 +53,7 @@ const ColoredText = observer(
           setIsShowImage(true)
           startIncreaseImage()
         }
-      }, 100) // Change the duration based on your needs
+      }, 50) // Change the duration based on your needs
 
       return () => {
         clearInterval(interImage)
@@ -48,15 +66,17 @@ const ColoredText = observer(
       interImage = setInterval(() => {
         i++
         setSize((prev) => prev + 5)
-        if (i === 15) {
+        if (i == 8) {
           playSound()
+        }
+        if (i === 15) {
           clearInterval(interImage)
 
           setTimeout(() => {
             increaseLineNum()
             setIsShowImage(false)
             setSize(20)
-          }, 4000)
+          }, 2500)
         }
       }, 50)
     }

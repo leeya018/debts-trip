@@ -9,8 +9,10 @@ import StandardButton from "ui/button/standard"
 import { addDoc, collection, doc, getDoc, setDoc } from "firebase/firestore"
 import { currencyStore } from "mobx/currencyStore"
 import Image from "next/image"
+import LessInput from "ui/input/less"
+import { beliefStore } from "mobx/beliefStore"
 
-export default function profile() {
+const profile = observer(() => {
   const metadata = {
     contentType: "image/jpeg",
   }
@@ -30,6 +32,8 @@ export default function profile() {
       if (docSnapshot.exists()) {
         const userData = docSnapshot.data()
         console.log("User's images:", userData.images)
+        beliefStore.setBelief(userData.belief)
+        userStore.setDisplayName(userData.displayName)
         //set Imges
         const imagesArr = Object.values(userData.images)
         console.log(imagesArr)
@@ -37,18 +41,6 @@ export default function profile() {
         setImages(imagesArr)
       }
     })
-  }
-  const fetchUserData = async () => {
-    const docRef = await addDoc(collection(db, "users"), {
-      name: "user",
-    })
-    const docSnap = await getDoc(docRef)
-
-    if (docSnap.exists()) {
-      console.log("Document data:", docSnap.data())
-    } else {
-      console.log("No such document!")
-    }
   }
 
   const upload = () => {
@@ -87,6 +79,31 @@ export default function profile() {
     console.log(e.target.files)
     setFile(URL.createObjectURL(e.target.files[0]))
   }
+  const save = async (e) => {
+    try {
+      const userRef = doc(db, "users", userStore.uid)
+      await setDoc(
+        userRef,
+        {
+          belief: beliefStore.belief,
+          displayName: userStore.displayName,
+        },
+        { merge: true }
+      )
+
+      // Fetch the new data
+      const docSnap = await getDoc(userRef)
+
+      // Check if the document exists and return the data
+      if (docSnap.exists()) {
+        return docSnap.data()
+      } else {
+        throw new Error("Document does not exist")
+      }
+    } catch (error) {
+      console.log(error)
+    }
+  }
   return (
     <div>
       <Title>Profile</Title>
@@ -96,9 +113,23 @@ export default function profile() {
         ref={inputFileRef}
         onChange={handleChange}
       />
-      <StandardButton onClick={fetchUserData}>fetchUserData</StandardButton>
       <StandardButton onClick={upload}>upload</StandardButton>
+      <LessInput
+        placeholder="display name"
+        className="w-full"
+        onChange={(e) => userStore.setDisplayName(e.target.value)}
+        value={userStore?.displayName}
+      />
+      <LessInput
+        placeholder="add belife"
+        className="w-full"
+        onChange={(e) => beliefStore.setBelief(e.target.value)}
+        value={beliefStore?.belief}
+      />
+      <StandardButton onClick={save}>save</StandardButton>
+
       <div className="w-full border-2  m-2">
+        {/* <div>{beliefStore.belief}</div> */}
         <ul className="w-full grid grid-cols-3 gap-3 ">
           {images.map((image, key) => (
             <li key={key} className=" " onClick={() => {}}>
@@ -109,4 +140,5 @@ export default function profile() {
       </div>
     </div>
   )
-}
+})
+export default profile

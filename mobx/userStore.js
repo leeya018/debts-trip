@@ -7,9 +7,19 @@ class User {
   displayName = ""
   uid = ""
   token = ""
+  believes = {}
+
   constructor() {
     makeAutoObservable(this)
     this.loadState()
+  }
+
+  setBelief(value) {
+    this.belief = value
+  }
+
+  setDisplayName(value) {
+    this.displayName = value
   }
   loadState() {
     if (typeof window !== "undefined" && window.localStorage) {
