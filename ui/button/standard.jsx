@@ -4,6 +4,8 @@ import Button from "."
 export default function StandardButton({
   children,
   onClick = () => {},
+  onMouseEnter = () => {},
+  onMouseLeave = () => {},
   className = "",
 }) {
   return (
@@ -12,6 +14,8 @@ export default function StandardButton({
        rounded-md 
           ${className}`}
       onClick={onClick}
+      onMouseEnter={onMouseEnter}
+      onMouseLeave={onMouseLeave}
     >
       {...children}
     </Button>

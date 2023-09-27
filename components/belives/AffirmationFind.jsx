@@ -11,6 +11,7 @@ import { asyncStore } from "mobx/asyncStore"
 import { CSpinner } from "@coreui/bootstrap-react"
 
 const AffirmationFind = observer(() => {
+  const [hover, setHover] = useState(false)
   const listRef = useRef(null)
   const [isFocused, setIsFocused] = useState(false)
   const [userBelives, setUserBelives] = useState({})
@@ -99,6 +100,12 @@ const AffirmationFind = observer(() => {
           value={affirmationsLim}
           onChange={(e) => setAffirmationsLim(e.target.value)}
         />
+        {hover && (
+          <div className="absolute  left-1/2 transform  -translate-y\ -translate-x-1/2 border border-gray-300 p-2 bg-gray-100 text-sm whitespace-nowrap z-50">
+            <p>clicks are limited according to your plan clicks are limited</p>
+            according to your plan clicks are limited according to your plan
+          </div>
+        )}
       </div>
       <LessInput
         placeholder="add belife"
@@ -123,13 +130,23 @@ const AffirmationFind = observer(() => {
             ))}
         </ul>
       )}
-      <StandardButton onClick={generateAffirmations}>
+
+      <div>{hover}</div>
+      <StandardButton
+        onMouseEnter={() => setHover(true)}
+        onMouseLeave={() => setHover(false)}
+        onClick={generateAffirmations}
+        className="bg-belief_pink"
+      >
         Generate Affirmations
       </StandardButton>
       <div>{setBelief}</div>
       <div>
         <ul className="flex flex-col gap-1">
-          <StandardButton onClick={() => setIsStart(true)}>
+          <StandardButton
+            className="bg-belief_green"
+            onClick={() => setIsStart(true)}
+          >
             Start Affirmations
           </StandardButton>
           {asyncStore.isLoading && (

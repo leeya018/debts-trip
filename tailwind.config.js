@@ -48,6 +48,7 @@ module.exports = {
       belief_gray_b: "#EEEEF0", //background
       belief_gray_t: "#838287", //text
       belief_gray_i: "#9B9CA2", //icons
+      belief_pink: "#f257b6", //icons
     },
     extend: {
       textColor: ["group-hover"],
