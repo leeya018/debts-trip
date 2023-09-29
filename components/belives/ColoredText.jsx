@@ -9,9 +9,10 @@ const ColoredText = observer(
   ({
     inputText = "23132123123",
     increaseLineNum = () => {},
-    setIsStart,
+    speed,
     affirmations,
     lineNum,
+    resetAffirmations,
   }) => {
     const [coloredText, setColoredText] = useState([])
     const [currentIndex, setCurrentIndex] = useState(0)
@@ -28,15 +29,13 @@ const ColoredText = observer(
     useEffect(() => {
       console.log("start")
       return () => {
-        // setIsStart(false)
-        // setIsStart(false)
         console.log("end   " + currentIndex)
         console.log(`${affirmations.length} == ${lineNum}`)
-        if (affirmations.length == lineNum) {
-          setIsStart(false)
+        if (affirmations.length - 1 == lineNum) {
+          resetAffirmations()
         }
       }
-    }, [])
+    }, [lineNum])
 
     useEffect(() => {
       const timer = setInterval(() => {
@@ -53,7 +52,7 @@ const ColoredText = observer(
           setIsShowImage(true)
           startIncreaseImage()
         }
-      }, 50) // Change the duration based on your needs
+      }, 70 - speed) // Change the duration based on your needs
 
       return () => {
         clearInterval(interImage)

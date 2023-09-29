@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from "react"
 import { observer } from "mobx-react-lite"
 import logo from "images/logo.png"
-import FlickerText from "./FlickerText"
+import FlickerText from "../components/belives/FlickerText"
 let inter
 const AddDetails = observer(() => {
   const [backgroundColor, setBackgroundColor] = useState("#ffffff") // default background color

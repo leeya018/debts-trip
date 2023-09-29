@@ -1,6 +1,5 @@
 import React, { useEffect, useRef, useState } from "react"
 import { observer } from "mobx-react-lite"
-import AddDetails from "components/belives/AddDetails"
 import axios from "axios"
 import StandardButton from "ui/button/standard"
 import Title from "ui/Title"
@@ -20,6 +19,7 @@ const AffirmationFind = observer(() => {
   const [affirmations, setAffirmations] = useState([])
   const [lineNum, setLineNum] = useState(0)
   const [isStart, setIsStart] = useState(false)
+  const [speed, setSpeed] = useState(20)
   const blurTimeoutRef = useRef(null)
 
   useEffect(() => {
@@ -33,9 +33,12 @@ const AffirmationFind = observer(() => {
     setIsFocused(true)
   }
 
-  
+  const resetAffirmations = (e) => {
+    setIsStart(false)
+    setLineNum(0)
+    setIsFocused(false)
+  }
   const handleBlur = (e) => {
-
     blurTimeoutRef.current = setTimeout(() => {
       setIsFocused(false)
     }, 200)
@@ -48,6 +51,10 @@ const AffirmationFind = observer(() => {
     setAffirmations(userBelif.affirmations)
     setIsFocused(false)
     clearTimeout(blurTimeoutRef.current)
+  }
+  const handleSpeed = (event) => {
+    setSpeed(event.target.value)
+    setLineNum(0)
   }
   const generateAffirmations = async () => {
     if (!belief || asyncStore.isLoading) {
@@ -76,7 +83,6 @@ const AffirmationFind = observer(() => {
   console.log(lineNum)
   return (
     <div className="h-[100vh] w-screen bg-secondary flex flex-col  px-2">
-      {/* <AddDetails /> */}
       <Title>Choose Belief</Title>
       <div className="flex items-center mb-2">
         <div>affirmations:</div>
@@ -88,12 +94,21 @@ const AffirmationFind = observer(() => {
           value={affirmationsLim}
           onChange={(e) => setAffirmationsLim(e.target.value)}
         />
-        {/* {hover && (
-          <div className="absolute  left-1/2 transform  -translate-y\ -translate-x-1/2 border border-gray-300 p-2 bg-gray-100 text-sm whitespace-nowrap z-50">
-            <p>clicks are limited according to your plan clicks are limited</p>
-            according to your plan clicks are limited according to your plan
+        {isStart && affirmations.length > lineNum && (
+          <div className="ml-2">
+            <input
+              type="range"
+              min="0"
+              max="50"
+              className="z-50"
+              value={speed}
+              onChange={handleSpeed}
+            />
+            <div className="flex justify-center items-center">
+              speed : {speed}
+            </div>
           </div>
-        )} */}
+        )}
       </div>
       <LessInput
         placeholder="add belife"
@@ -154,13 +169,16 @@ const AffirmationFind = observer(() => {
             ))}
         </ul>
         {isStart && affirmations.length > lineNum && (
-          <ColoredText
-            lineNum={lineNum}
-            affirmations={affirmations}
-            setIsStart={setIsStart}
-            inputText={affirmations[lineNum]}
-            increaseLineNum={increaseLineNum}
-          />
+          <div>
+            <ColoredText
+              lineNum={lineNum}
+              affirmations={affirmations}
+              resetAffirmations={resetAffirmations}
+              inputText={affirmations[lineNum]}
+              increaseLineNum={increaseLineNum}
+              speed={speed}
+            />
+          </div>
         )}
       </div>
     </div>

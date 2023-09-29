@@ -1,6 +1,5 @@
 import React, { useState } from "react"
 import { observer } from "mobx-react-lite"
-import AddDetails from "components/belives/AddDetails"
 import axios from "axios"
 import ColoredText from "components/belives/ColoredText"
 import Sound from "components/belives/Sound"
@@ -37,7 +36,7 @@ const index = observer(() => {
         )} */}
       {/* <div>{userStore.displayName}</div> */}
       <Navbar />
-      {/* AddDetails */}
+      {/* <AddDetails /> */}
     </div>
   )
 })
