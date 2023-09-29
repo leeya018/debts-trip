@@ -6,6 +6,7 @@ export default function Button({
   onMouseEnter = () => {},
   onMouseLeave = () => {},
   className = "",
+  disabled = false,
 }) {
   return (
     <div
@@ -14,6 +15,7 @@ export default function Button({
       onMouseEnter={onMouseEnter}
       onMouseLeave={onMouseLeave}
       onClick={onClick}
+      disabled={disabled}
     >
       {children}
     </div>

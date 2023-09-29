@@ -7,6 +7,7 @@ export default function StandardButton({
   onMouseEnter = () => {},
   onMouseLeave = () => {},
   className = "",
+  disabled = false,
 }) {
   return (
     <Button
@@ -16,6 +17,7 @@ export default function StandardButton({
       onClick={onClick}
       onMouseEnter={onMouseEnter}
       onMouseLeave={onMouseLeave}
+      disabled={disabled}
     >
       {...children}
     </Button>

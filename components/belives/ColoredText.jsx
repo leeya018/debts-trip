@@ -3,6 +3,7 @@ import { observer } from "mobx-react-lite"
 import muscle from "images/muscle.png"
 import Image from "next/image"
 import useSound from "hooks/useSound"
+import { filterStore } from "mobx/filterStore"
 let interImage
 
 const ColoredText = observer(
@@ -10,7 +11,6 @@ const ColoredText = observer(
     inputText = "23132123123",
     increaseLineNum = () => {},
     speed,
-    affirmations,
     lineNum,
     resetAffirmations,
   }) => {
@@ -19,6 +19,7 @@ const ColoredText = observer(
     const [size, setSize] = useState(10) // starting size (percentage)
     const [isShowImage, setIsShowImage] = useState(false) // starting size (percentage)
     const { sound, playSound } = useSound("/positive.wav")
+    const { affirmations } = filterStore
 
     useEffect(() => {
       // Reset coloredText and currentIndex when inputText changes

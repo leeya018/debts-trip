@@ -11,33 +11,51 @@ import {
 } from "api"
 import Title from "ui/Title"
 import StandardButton from "ui/button/standard"
+import FilterBelive from "components/belives/FilterBelive"
+import { filterStore } from "mobx/filterStore"
+import { CSpinner } from "@coreui/bootstrap-react"
 
 const articles = observer(() => {
-  const [chosenBelief, setChosenBelief] = useState("")
+  // const [belief, setbelief] = useState("")
   const [userBelives, setUserBelives] = useState({})
   const [userArticle, setUserArticle] = useState({})
   const [articleImages, setArticleImages] = useState([])
+  const { belief } = filterStore
 
   useEffect(() => {
     getBelivesApi().then((res) => {
       console.log(res)
       setUserBelives(res)
-      setChosenBelief(res[0].name)
     })
   }, [])
+  const isClickEnable = () => {
+    return (
+      belief !== "" &&
+      belief.split(" ").length >= 3 &&
+      asyncStore.isLoading == false
+    )
+  }
   const getArticleImages = async () => {
-    const images = await getArticleImagesApi("women are desire me")
-    setArticleImages(images)
+    try {
+      const images = await getArticleImagesApi(belief)
+      return images
+    } catch (error) {
+      asyncStore.setIsLoading(false)
+    }
   }
-  const getArticles = async () => {
-    const res = await getArticlesApi()
-    console.log(res)
-  }
-  const generateArticle = async () => {
-    if (!chosenBelief || asyncStore.isLoading) {
+
+  const getFullArticle = async () => {
+    if (!isClickEnable() || asyncStore.isLoading) {
       return
     }
-
+    asyncStore.setIsLoading(true)
+    const values = await Promise.all([generateArticle(), getArticleImages()])
+    console.log(values)
+    asyncStore.setIsLoading(false)
+    setUserArticle(JSON.parse(values[0]))
+    setArticleImages(values[1])
+  }
+  const generateArticle = async () => {
     const question = `generate an article with a title and 1 paragraph for a user name: ${
       userStore.displayName || "Lee Yahav"
     } which have the belife of : ${
@@ -46,14 +64,11 @@ const articles = observer(() => {
     ( no more than 50 words response)`
 
     try {
-      asyncStore.setIsLoading(true)
       const res = await askGptApi({
         question,
       })
-      asyncStore.setIsLoading(false)
       console.log(res.data.message.content)
-      setUserArticle(JSON.parse(res.data.message.content))
-      getArticleImages()
+      return res.data.message.content
     } catch (error) {
       asyncStore.setIsLoading(false)
       console.log(error)
@@ -62,18 +77,24 @@ const articles = observer(() => {
   return (
     <div className="h-[100vh] w-screen bg-secondary flex flex-col  px-2">
       <Title>articles</Title>
-      <StandardButton onClick={getArticles} className="bg-belief_pink">
+      <StandardButton onClick={() => {}} className="bg-belief_pink">
         show article
       </StandardButton>
-      <div>
-        Chosen belief : <div className="bg-belief_gray_t">{chosenBelief}</div>
-      </div>
-      <StandardButton onClick={generateArticle} className="bg-belief_green">
+
+      <div className="bg-belief_green flex"> Chosen belief : {belief}</div>
+
+      <FilterBelive />
+      <StandardButton
+        disabled={isClickEnable()}
+        onClick={getFullArticle}
+        className={isClickEnable() ? "bg-belief_green" : "bg-belief_gray_t"}
+      >
         Generate Article
       </StandardButton>
-      <StandardButton onClick={getArticleImages} className="bg-belief_green">
+      {/* <StandardButton onClick={getArticleImages} className="bg-belief_green">
         show images
-      </StandardButton>
+      </StandardButton> */}
+      {asyncStore.isLoading && <CSpinner className="mt-10" color="primary" />}
 
       <div className="flex justify-center">
         <div className="flex flex-col items-center w-[80%] ">
