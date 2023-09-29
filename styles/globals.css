@@ -10,7 +10,7 @@ ul,
 li,
 table p {
   /* @apply select-none; */
-  /* @apply border-2; */
+  @apply border-2;
 }
 /* styles.css or your TailwindCSS stylesheet */
 

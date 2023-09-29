@@ -33,11 +33,46 @@ const getBelivesApi = async () => {
   if (userSnap.exists()) {
     // User document data
     const userData = userSnap.data()
-    return userData
+    return userData.beliefs
   } else {
     // Handle the case where the document does not exist
     console.error("User does not exist")
     return null
+  }
+}
+const getArticlesApi = async () => {
+  // Reference to the document in the 'users' collection
+  const userRef = doc(db, "users", userStore.uid)
+
+  // Fetch the document
+  const userSnap = await getDoc(userRef)
+
+  if (userSnap.exists()) {
+    // User document data
+    const userData = userSnap.data()
+    return userData.articles
+  } else {
+    // Handle the case where the document does not exist
+    console.error("User does not exist")
+    return null
+  }
+}
+const getArticleImagesApi = async (searchTxt) => {
+  try {
+    const res = await axios.post(
+      url + "/lexica",
+      { searchTxt },
+      {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    )
+    console.log("getArticleImagesApi")
+    console.log(res)
+    return res.data.images
+  } catch (error) {
+    console.error("Error fetching user:", error)
   }
 }
 const askGptApi = async (body) => {
@@ -54,4 +89,10 @@ const askGptApi = async (body) => {
   }
 }
 
-export { askGptApi, getBelivesApi, saveBelivesApi }
+export {
+  askGptApi,
+  getBelivesApi,
+  saveBelivesApi,
+  getArticlesApi,
+  getArticleImagesApi,
+}

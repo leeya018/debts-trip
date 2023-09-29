@@ -25,7 +25,7 @@ const AffirmationFind = observer(() => {
   useEffect(() => {
     getBelivesApi().then((res) => {
       console.log(res)
-      setUserBelives(res.beliefs)
+      setUserBelives(res)
     })
   }, [])
 
@@ -33,13 +33,9 @@ const AffirmationFind = observer(() => {
     setIsFocused(true)
   }
 
-  // Handle input blur
+  
   const handleBlur = (e) => {
-    // if (
-    //   !listRef.current?.contains(e.target)
-    // ) {
-    //   setIsFocused(false)
-    // }
+
     blurTimeoutRef.current = setTimeout(() => {
       setIsFocused(false)
     }, 200)
