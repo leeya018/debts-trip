@@ -89,7 +89,18 @@ const askGptApi = async (body) => {
   }
 }
 
+const getMyImagesApi = async () => {
+  const docSnapshot = await getDoc(doc(db, "users", userStore.uid))
+  if (docSnapshot.exists()) {
+    const userData = docSnapshot.data()
+    console.log("User's images:", userData.images)
+    return Object.values(userData.images)
+  }
+  return []
+}
+
 export {
+  getMyImagesApi,
   askGptApi,
   getBelivesApi,
   saveBelivesApi,

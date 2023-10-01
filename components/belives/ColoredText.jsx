@@ -22,11 +22,10 @@ const ColoredText = observer(
     const { affirmations } = filterStore
 
     useEffect(() => {
-      // Reset coloredText and currentIndex when inputText changes
-
       setColoredText([])
       setCurrentIndex(0)
     }, [inputText])
+
     useEffect(() => {
       console.log("start")
       return () => {

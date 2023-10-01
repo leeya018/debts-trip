@@ -28,13 +28,13 @@ const index = observer(() => {
 
   return (
     <div className="h-[100vh] w-screen bg-secondary flex flex-col  px-2">
-      {/* {isClient && (
+      {isClient && (
         <div className="absolute top-0 right-0 flex gap-2 items-center mr-3 ">
           <div>{getProfileImage()}</div>
           <div>{userStore.displayName}</div>
-          </div>
-        )} */}
-      {/* <div>{userStore.displayName}</div> */}
+        </div>
+      )}
+      <div>{userStore.displayName}</div>
       <Navbar />
       {/* <AddDetails /> */}
     </div>

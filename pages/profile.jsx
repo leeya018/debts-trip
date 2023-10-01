@@ -105,7 +105,7 @@ const profile = observer(() => {
     }
   }
   return (
-    <div>
+    <div className="">
       <Title>Profile</Title>
       <input
         id="imageFile"
@@ -128,12 +128,12 @@ const profile = observer(() => {
       />
       <StandardButton onClick={save}>save</StandardButton>
 
-      <div className="w-full border-2  m-2">
+      <div className="w-full border-2 m-2 ">
         {/* <div>{beliefStore.belief}</div> */}
-        <ul className="w-full grid grid-cols-3 gap-3 ">
+        <ul className="w-full grid grid-cols-3 gap-3 overflow-y-auto overflow-scroll">
           {images.map((image, key) => (
             <li key={key} className=" " onClick={() => {}}>
-              <img className="shadow-2xl " src={image} />
+              <img className="shadow-2xl  w-60 h-60" src={image} />
             </li>
           ))}
         </ul>

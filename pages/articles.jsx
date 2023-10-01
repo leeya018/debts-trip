@@ -8,18 +8,24 @@ import {
   getArticleImagesApi,
   getArticlesApi,
   getBelivesApi,
+  getMyImagesApi,
 } from "api"
 import Title from "ui/Title"
 import StandardButton from "ui/button/standard"
 import FilterBelive from "components/belives/FilterBelive"
 import { filterStore } from "mobx/filterStore"
 import { CSpinner } from "@coreui/bootstrap-react"
+import { getRandInd } from "lib/util"
+const lexaAmount = 12
+const paragraphs = 3
+const words = 200
 
 const articles = observer(() => {
   // const [belief, setbelief] = useState("")
   const [userBelives, setUserBelives] = useState({})
   const [userArticle, setUserArticle] = useState({})
   const [articleImages, setArticleImages] = useState([])
+  const [myImages, setMyImages] = useState("")
   const { belief } = filterStore
 
   useEffect(() => {
@@ -43,25 +49,38 @@ const articles = observer(() => {
       asyncStore.setIsLoading(false)
     }
   }
+  const getImages = async () => {
+    const values = await Promise.all([getArticleImages(), getMyImagesApi()])
+    console.log(values)
+    asyncStore.setIsLoading(false)
+    setArticleImages(values[0])
+    setMyImages(values[1])
+  }
 
   const getFullArticle = async () => {
     if (!isClickEnable() || asyncStore.isLoading) {
       return
     }
     asyncStore.setIsLoading(true)
-    const values = await Promise.all([generateArticle(), getArticleImages()])
+    const values = await Promise.all([
+      generateArticle(),
+      getArticleImages(),
+      getMyImagesApi(),
+    ])
     console.log(values)
     asyncStore.setIsLoading(false)
     setUserArticle(JSON.parse(values[0]))
     setArticleImages(values[1])
+    setMyImages(values[2])
   }
   const generateArticle = async () => {
-    const question = `generate an article with a title and 1 paragraph for a user name: ${
+    const question = `generate an article with a title and ${paragraphs} paragraph for a user name: ${
       userStore.displayName || "Lee Yahav"
     } which have the belife of : ${
       beliefStore.belief
-    }. I want that the arcitle will look like he allready achive it or something on the way there . please return the data in an object with the parms: title , content and currentDate in that format : DD/MM/YYYY 
-    ( no more than 50 words response)`
+    }. I want that the arcitle will look like he allready achive it or something on the way there .
+     please return the data in an object with the parms: title , content and currentDate in that format : DD/MM/YYYY 
+    ( no more than ${words} words response)`
 
     try {
       const res = await askGptApi({
@@ -91,9 +110,9 @@ const articles = observer(() => {
       >
         Generate Article
       </StandardButton>
-      {/* <StandardButton onClick={getArticleImages} className="bg-belief_green">
+      <StandardButton onClick={getImages} className="bg-belief_green">
         show images
-      </StandardButton> */}
+      </StandardButton>
       {asyncStore.isLoading && <CSpinner className="mt-10" color="primary" />}
 
       <div className="flex justify-center">
@@ -103,17 +122,42 @@ const articles = observer(() => {
             {userArticle?.title}{" "}
           </div>
           <div className=""> {userArticle?.content}</div>
-          <div className="relative flex flex-wrap gap-2 justify-between">
-            {/* <img src="absolute w-40 h-40 " alt="profile img" /> */}
-            {articleImages?.slice(0, 10).map((img, key) => (
-              <li key={key} className="" onClick={() => {}}>
-                <img
-                  src={`${process.env.NEXT_PUBLIC_IMAGES_URL}/${img.id}`}
-                  alt="something her "
-                  className="w-40 h-40"
-                />
-              </li>
-            ))}
+
+          <div className="relative w-full flex justify-between">
+            <div className="grid grid-cols-3">
+              {articleImages?.slice(0, lexaAmount / 2).map((img, key) => (
+                <li key={key} className="" onClick={() => {}}>
+                  <img
+                    src={`${process.env.NEXT_PUBLIC_IMAGES_URL}/${img.id}`}
+                    alt="something her "
+                    className="w-40 h-40"
+                  />
+                </li>
+              ))}
+            </div>
+
+            {myImages.length > 0 && (
+              <img
+                id="my-image"
+                src={myImages[getRandInd(myImages.length)]}
+                alt="something me "
+                className="  object-contain w-96 h-96 opacity-100"
+              />
+            )}
+
+            <div className="grid grid-cols-3">
+              {articleImages
+                ?.slice(lexaAmount / 2, lexaAmount)
+                .map((img, key) => (
+                  <li key={key} className="" onClick={() => {}}>
+                    <img
+                      src={`${process.env.NEXT_PUBLIC_IMAGES_URL}/${img.id}`}
+                      alt="something her "
+                      className="w-40 h-40"
+                    />
+                  </li>
+                ))}
+            </div>
           </div>
           <div className="self-end mt-5 text-[10px]">
             {" "}
