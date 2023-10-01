@@ -4,6 +4,7 @@ import { beliefStore } from "mobx/beliefStore"
 import { asyncStore } from "mobx/asyncStore"
 import { userStore } from "mobx/userStore"
 import {
+  addArticlesApi,
   askGptApi,
   getArticleImagesApi,
   getArticlesApi,
@@ -17,15 +18,15 @@ import { filterStore } from "mobx/filterStore"
 import { CSpinner } from "@coreui/bootstrap-react"
 import { getRandInd } from "lib/util"
 const lexaAmount = 12
-const paragraphs = 3
-const words = 200
+const paragraphs = 1
+const words = 50
 
 const articles = observer(() => {
   // const [belief, setbelief] = useState("")
   const [userBelives, setUserBelives] = useState({})
   const [userArticle, setUserArticle] = useState({})
   const [articleImages, setArticleImages] = useState([])
-  const [myImages, setMyImages] = useState("")
+  const [myImage, setMyImage] = useState("")
   const { belief } = filterStore
 
   useEffect(() => {
@@ -54,7 +55,8 @@ const articles = observer(() => {
     console.log(values)
     asyncStore.setIsLoading(false)
     setArticleImages(values[0])
-    setMyImages(values[1])
+    const mImg = [getRandInd(values[1].length)]
+    setMyImage(mImg)
   }
 
   const getFullArticle = async () => {
@@ -71,7 +73,16 @@ const articles = observer(() => {
     asyncStore.setIsLoading(false)
     setUserArticle(JSON.parse(values[0]))
     setArticleImages(values[1])
-    setMyImages(values[2])
+    const mImg = values[2][getRandInd(values[2].length)]
+    setMyImage(mImg)
+
+    const article = {
+      belief: belief,
+      images: values[1].map((im) => im.id).slice(0, lexaAmount),
+      userArticle: JSON.parse(values[0]),
+      myImage: mImg,
+    }
+    addArticlesApi(article)
   }
   const generateArticle = async () => {
     const question = `generate an article with a title and ${paragraphs} paragraph for a user name: ${
@@ -136,10 +147,10 @@ const articles = observer(() => {
               ))}
             </div>
 
-            {myImages.length > 0 && (
+            {myImage && (
               <img
                 id="my-image"
-                src={myImages[getRandInd(myImages.length)]}
+                src={myImage}
                 alt="something me "
                 className="  object-contain w-96 h-96 opacity-100"
               />

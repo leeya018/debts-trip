@@ -57,6 +57,15 @@ const getArticlesApi = async () => {
     return null
   }
 }
+const addArticlesApi = async (article) => {
+  // const { belief, images, title, text, myImage } = article
+  const userRef = doc(db, "users", userStore.uid)
+
+  // Update the user document by adding a new belief to the 'beliefs' array
+  await updateDoc(userRef, {
+    articles: arrayUnion(article),
+  })
+}
 const getArticleImagesApi = async (searchTxt) => {
   try {
     const res = await axios.post(
@@ -100,6 +109,7 @@ const getMyImagesApi = async () => {
 }
 
 export {
+  addArticlesApi,
   getMyImagesApi,
   askGptApi,
   getBelivesApi,
